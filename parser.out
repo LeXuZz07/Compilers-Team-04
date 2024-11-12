@@ -1,0 +1,187 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    BRACKETS
+    BREAK
+    DIVISION
+    DO
+    ELSE
+    EXPONENTIAL
+    FOR
+    IF
+    LESS
+    LKEY
+    LPAREN
+    MODULE
+    MORE
+    MULTIPLICATION
+    NULL
+    OPERATORS
+    RETURN
+    RKEY
+    RPAREN
+    SIMPLE_LITERAL
+    SPECIAL
+    WHILE
+
+Grammar
+
+Rule 0     S' -> statement
+Rule 1     statement -> type ID EQUALS value
+Rule 2     type -> INT
+Rule 3     type -> FLOAT
+Rule 4     type -> BOOL
+Rule 5     value -> NUMBER
+Rule 6     value -> SPOT
+Rule 7     value -> BOOL_TRUE
+Rule 8     value -> BOOL_FALSE
+
+Terminals, with rules where they appear
+
+BOOL                 : 4
+BOOL_FALSE           : 8
+BOOL_TRUE            : 7
+BRACKETS             : 
+BREAK                : 
+DIVISION             : 
+DO                   : 
+ELSE                 : 
+EQUALS               : 1
+EXPONENTIAL          : 
+FLOAT                : 3
+FOR                  : 
+ID                   : 1
+IF                   : 
+INT                  : 2
+LESS                 : 
+LKEY                 : 
+LPAREN               : 
+MODULE               : 
+MORE                 : 
+MULTIPLICATION       : 
+NULL                 : 
+NUMBER               : 5
+OPERATORS            : 
+RETURN               : 
+RKEY                 : 
+RPAREN               : 
+SIMPLE_LITERAL       : 
+SPECIAL              : 
+SPOT                 : 6
+WHILE                : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+statement            : 0
+type                 : 1
+value                : 1
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . statement
+    (1) statement -> . type ID EQUALS value
+    (2) type -> . INT
+    (3) type -> . FLOAT
+    (4) type -> . BOOL
+
+    INT             shift and go to state 3
+    FLOAT           shift and go to state 4
+    BOOL            shift and go to state 5
+
+    statement                      shift and go to state 1
+    type                           shift and go to state 2
+
+state 1
+
+    (0) S' -> statement .
+
+
+
+state 2
+
+    (1) statement -> type . ID EQUALS value
+
+    ID              shift and go to state 6
+
+
+state 3
+
+    (2) type -> INT .
+
+    ID              reduce using rule 2 (type -> INT .)
+
+
+state 4
+
+    (3) type -> FLOAT .
+
+    ID              reduce using rule 3 (type -> FLOAT .)
+
+
+state 5
+
+    (4) type -> BOOL .
+
+    ID              reduce using rule 4 (type -> BOOL .)
+
+
+state 6
+
+    (1) statement -> type ID . EQUALS value
+
+    EQUALS          shift and go to state 7
+
+
+state 7
+
+    (1) statement -> type ID EQUALS . value
+    (5) value -> . NUMBER
+    (6) value -> . SPOT
+    (7) value -> . BOOL_TRUE
+    (8) value -> . BOOL_FALSE
+
+    NUMBER          shift and go to state 9
+    SPOT            shift and go to state 10
+    BOOL_TRUE       shift and go to state 11
+    BOOL_FALSE      shift and go to state 12
+
+    value                          shift and go to state 8
+
+state 8
+
+    (1) statement -> type ID EQUALS value .
+
+    $end            reduce using rule 1 (statement -> type ID EQUALS value .)
+
+
+state 9
+
+    (5) value -> NUMBER .
+
+    $end            reduce using rule 5 (value -> NUMBER .)
+
+
+state 10
+
+    (6) value -> SPOT .
+
+    $end            reduce using rule 6 (value -> SPOT .)
+
+
+state 11
+
+    (7) value -> BOOL_TRUE .
+
+    $end            reduce using rule 7 (value -> BOOL_TRUE .)
+
+
+state 12
+
+    (8) value -> BOOL_FALSE .
+
+    $end            reduce using rule 8 (value -> BOOL_FALSE .)
+
