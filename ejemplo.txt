@@ -1,1 +1,4 @@
-bool a = true
+int a = 82
+int b = 2
+c = (a * 12 - (5 ^ b + 16 - b ^ 5)) / (27 - 4 + 88 * (12 ^ b - 66 + 24))
+print(c)

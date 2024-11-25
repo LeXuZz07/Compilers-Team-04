@@ -2,186 +2,861 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
+    BOOL
+    BOOL_FALSE
+    BOOL_TRUE
     BRACKETS
     BREAK
-    DIVISION
     DO
     ELSE
-    EXPONENTIAL
     FOR
     IF
-    LESS
     LKEY
-    LPAREN
-    MODULE
-    MORE
-    MULTIPLICATION
     NULL
     OPERATORS
     RETURN
     RKEY
-    RPAREN
     SIMPLE_LITERAL
     SPECIAL
     WHILE
 
 Grammar
 
-Rule 0     S' -> statement
-Rule 1     statement -> type ID EQUALS value
-Rule 2     type -> INT
-Rule 3     type -> FLOAT
-Rule 4     type -> BOOL
-Rule 5     value -> NUMBER
-Rule 6     value -> SPOT
-Rule 7     value -> BOOL_TRUE
-Rule 8     value -> BOOL_FALSE
+Rule 0     S' -> statements
+Rule 1     statements -> statements statement
+Rule 2     statements -> statement
+Rule 3     statement -> type ID EQUALS expression
+Rule 4     statement -> ID EQUALS expression
+Rule 5     statement -> PRINT LPAREN expression RPAREN
+Rule 6     type -> INT
+Rule 7     type -> FLOAT
+Rule 8     expression -> LESS expression
+Rule 9     expression -> MORE expression
+Rule 10    expression -> expression MORE expression
+Rule 11    expression -> expression LESS expression
+Rule 12    expression -> expression MULTIPLICATION expression
+Rule 13    expression -> expression DIVISION expression
+Rule 14    expression -> expression MODULE expression
+Rule 15    expression -> expression EXPONENTIAL expression
+Rule 16    expression -> LPAREN expression RPAREN
+Rule 17    expression -> NUMBER
+Rule 18    expression -> ID
 
 Terminals, with rules where they appear
 
-BOOL                 : 4
-BOOL_FALSE           : 8
-BOOL_TRUE            : 7
+BOOL                 : 
+BOOL_FALSE           : 
+BOOL_TRUE            : 
 BRACKETS             : 
 BREAK                : 
-DIVISION             : 
+DIVISION             : 13
 DO                   : 
 ELSE                 : 
-EQUALS               : 1
-EXPONENTIAL          : 
-FLOAT                : 3
+EQUALS               : 3 4
+EXPONENTIAL          : 15
+FLOAT                : 7
 FOR                  : 
-ID                   : 1
+ID                   : 3 4 18
 IF                   : 
-INT                  : 2
-LESS                 : 
+INT                  : 6
+LESS                 : 8 11
 LKEY                 : 
-LPAREN               : 
-MODULE               : 
-MORE                 : 
-MULTIPLICATION       : 
+LPAREN               : 5 16
+MODULE               : 14
+MORE                 : 9 10
+MULTIPLICATION       : 12
 NULL                 : 
-NUMBER               : 5
+NUMBER               : 17
 OPERATORS            : 
+PRINT                : 5
 RETURN               : 
 RKEY                 : 
-RPAREN               : 
+RPAREN               : 5 16
 SIMPLE_LITERAL       : 
 SPECIAL              : 
-SPOT                 : 6
 WHILE                : 
 error                : 
 
 Nonterminals, with rules where they appear
 
-statement            : 0
-type                 : 1
-value                : 1
+expression           : 3 4 5 8 9 10 10 11 11 12 12 13 13 14 14 15 15 16
+statement            : 1 2
+statements           : 1 0
+type                 : 3
 
 Parsing method: LALR
 
 state 0
 
-    (0) S' -> . statement
-    (1) statement -> . type ID EQUALS value
-    (2) type -> . INT
-    (3) type -> . FLOAT
-    (4) type -> . BOOL
+    (0) S' -> . statements
+    (1) statements -> . statements statement
+    (2) statements -> . statement
+    (3) statement -> . type ID EQUALS expression
+    (4) statement -> . ID EQUALS expression
+    (5) statement -> . PRINT LPAREN expression RPAREN
+    (6) type -> . INT
+    (7) type -> . FLOAT
 
-    INT             shift and go to state 3
-    FLOAT           shift and go to state 4
-    BOOL            shift and go to state 5
+    ID              shift and go to state 4
+    PRINT           shift and go to state 5
+    INT             shift and go to state 6
+    FLOAT           shift and go to state 7
 
-    statement                      shift and go to state 1
-    type                           shift and go to state 2
+    statements                     shift and go to state 1
+    statement                      shift and go to state 2
+    type                           shift and go to state 3
 
 state 1
 
-    (0) S' -> statement .
+    (0) S' -> statements .
+    (1) statements -> statements . statement
+    (3) statement -> . type ID EQUALS expression
+    (4) statement -> . ID EQUALS expression
+    (5) statement -> . PRINT LPAREN expression RPAREN
+    (6) type -> . INT
+    (7) type -> . FLOAT
 
+    ID              shift and go to state 4
+    PRINT           shift and go to state 5
+    INT             shift and go to state 6
+    FLOAT           shift and go to state 7
 
+    statement                      shift and go to state 8
+    type                           shift and go to state 3
 
 state 2
 
-    (1) statement -> type . ID EQUALS value
+    (2) statements -> statement .
 
-    ID              shift and go to state 6
+    ID              reduce using rule 2 (statements -> statement .)
+    PRINT           reduce using rule 2 (statements -> statement .)
+    INT             reduce using rule 2 (statements -> statement .)
+    FLOAT           reduce using rule 2 (statements -> statement .)
+    $end            reduce using rule 2 (statements -> statement .)
 
 
 state 3
 
-    (2) type -> INT .
+    (3) statement -> type . ID EQUALS expression
 
-    ID              reduce using rule 2 (type -> INT .)
+    ID              shift and go to state 9
 
 
 state 4
 
-    (3) type -> FLOAT .
+    (4) statement -> ID . EQUALS expression
 
-    ID              reduce using rule 3 (type -> FLOAT .)
+    EQUALS          shift and go to state 10
 
 
 state 5
 
-    (4) type -> BOOL .
+    (5) statement -> PRINT . LPAREN expression RPAREN
 
-    ID              reduce using rule 4 (type -> BOOL .)
+    LPAREN          shift and go to state 11
 
 
 state 6
 
-    (1) statement -> type ID . EQUALS value
+    (6) type -> INT .
 
-    EQUALS          shift and go to state 7
+    ID              reduce using rule 6 (type -> INT .)
 
 
 state 7
 
-    (1) statement -> type ID EQUALS . value
-    (5) value -> . NUMBER
-    (6) value -> . SPOT
-    (7) value -> . BOOL_TRUE
-    (8) value -> . BOOL_FALSE
+    (7) type -> FLOAT .
 
-    NUMBER          shift and go to state 9
-    SPOT            shift and go to state 10
-    BOOL_TRUE       shift and go to state 11
-    BOOL_FALSE      shift and go to state 12
+    ID              reduce using rule 7 (type -> FLOAT .)
 
-    value                          shift and go to state 8
 
 state 8
 
-    (1) statement -> type ID EQUALS value .
+    (1) statements -> statements statement .
 
-    $end            reduce using rule 1 (statement -> type ID EQUALS value .)
+    ID              reduce using rule 1 (statements -> statements statement .)
+    PRINT           reduce using rule 1 (statements -> statements statement .)
+    INT             reduce using rule 1 (statements -> statements statement .)
+    FLOAT           reduce using rule 1 (statements -> statements statement .)
+    $end            reduce using rule 1 (statements -> statements statement .)
 
 
 state 9
 
-    (5) value -> NUMBER .
+    (3) statement -> type ID . EQUALS expression
 
-    $end            reduce using rule 5 (value -> NUMBER .)
+    EQUALS          shift and go to state 12
 
 
 state 10
 
-    (6) value -> SPOT .
+    (4) statement -> ID EQUALS . expression
+    (8) expression -> . LESS expression
+    (9) expression -> . MORE expression
+    (10) expression -> . expression MORE expression
+    (11) expression -> . expression LESS expression
+    (12) expression -> . expression MULTIPLICATION expression
+    (13) expression -> . expression DIVISION expression
+    (14) expression -> . expression MODULE expression
+    (15) expression -> . expression EXPONENTIAL expression
+    (16) expression -> . LPAREN expression RPAREN
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
 
-    $end            reduce using rule 6 (value -> SPOT .)
+    LESS            shift and go to state 15
+    MORE            shift and go to state 16
+    LPAREN          shift and go to state 17
+    NUMBER          shift and go to state 18
+    ID              shift and go to state 13
 
+    expression                     shift and go to state 14
 
 state 11
 
-    (7) value -> BOOL_TRUE .
+    (5) statement -> PRINT LPAREN . expression RPAREN
+    (8) expression -> . LESS expression
+    (9) expression -> . MORE expression
+    (10) expression -> . expression MORE expression
+    (11) expression -> . expression LESS expression
+    (12) expression -> . expression MULTIPLICATION expression
+    (13) expression -> . expression DIVISION expression
+    (14) expression -> . expression MODULE expression
+    (15) expression -> . expression EXPONENTIAL expression
+    (16) expression -> . LPAREN expression RPAREN
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
 
-    $end            reduce using rule 7 (value -> BOOL_TRUE .)
+    LESS            shift and go to state 15
+    MORE            shift and go to state 16
+    LPAREN          shift and go to state 17
+    NUMBER          shift and go to state 18
+    ID              shift and go to state 13
 
+    expression                     shift and go to state 19
 
 state 12
 
-    (8) value -> BOOL_FALSE .
+    (3) statement -> type ID EQUALS . expression
+    (8) expression -> . LESS expression
+    (9) expression -> . MORE expression
+    (10) expression -> . expression MORE expression
+    (11) expression -> . expression LESS expression
+    (12) expression -> . expression MULTIPLICATION expression
+    (13) expression -> . expression DIVISION expression
+    (14) expression -> . expression MODULE expression
+    (15) expression -> . expression EXPONENTIAL expression
+    (16) expression -> . LPAREN expression RPAREN
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
 
-    $end            reduce using rule 8 (value -> BOOL_FALSE .)
+    LESS            shift and go to state 15
+    MORE            shift and go to state 16
+    LPAREN          shift and go to state 17
+    NUMBER          shift and go to state 18
+    ID              shift and go to state 13
+
+    expression                     shift and go to state 20
+
+state 13
+
+    (18) expression -> ID .
+
+    MORE            reduce using rule 18 (expression -> ID .)
+    LESS            reduce using rule 18 (expression -> ID .)
+    MULTIPLICATION  reduce using rule 18 (expression -> ID .)
+    DIVISION        reduce using rule 18 (expression -> ID .)
+    MODULE          reduce using rule 18 (expression -> ID .)
+    EXPONENTIAL     reduce using rule 18 (expression -> ID .)
+    ID              reduce using rule 18 (expression -> ID .)
+    PRINT           reduce using rule 18 (expression -> ID .)
+    INT             reduce using rule 18 (expression -> ID .)
+    FLOAT           reduce using rule 18 (expression -> ID .)
+    $end            reduce using rule 18 (expression -> ID .)
+    RPAREN          reduce using rule 18 (expression -> ID .)
+
+
+state 14
+
+    (4) statement -> ID EQUALS expression .
+    (10) expression -> expression . MORE expression
+    (11) expression -> expression . LESS expression
+    (12) expression -> expression . MULTIPLICATION expression
+    (13) expression -> expression . DIVISION expression
+    (14) expression -> expression . MODULE expression
+    (15) expression -> expression . EXPONENTIAL expression
+
+    ID              reduce using rule 4 (statement -> ID EQUALS expression .)
+    PRINT           reduce using rule 4 (statement -> ID EQUALS expression .)
+    INT             reduce using rule 4 (statement -> ID EQUALS expression .)
+    FLOAT           reduce using rule 4 (statement -> ID EQUALS expression .)
+    $end            reduce using rule 4 (statement -> ID EQUALS expression .)
+    MORE            shift and go to state 21
+    LESS            shift and go to state 22
+    MULTIPLICATION  shift and go to state 23
+    DIVISION        shift and go to state 24
+    MODULE          shift and go to state 25
+    EXPONENTIAL     shift and go to state 26
+
+
+state 15
+
+    (8) expression -> LESS . expression
+    (8) expression -> . LESS expression
+    (9) expression -> . MORE expression
+    (10) expression -> . expression MORE expression
+    (11) expression -> . expression LESS expression
+    (12) expression -> . expression MULTIPLICATION expression
+    (13) expression -> . expression DIVISION expression
+    (14) expression -> . expression MODULE expression
+    (15) expression -> . expression EXPONENTIAL expression
+    (16) expression -> . LPAREN expression RPAREN
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
+
+    LESS            shift and go to state 15
+    MORE            shift and go to state 16
+    LPAREN          shift and go to state 17
+    NUMBER          shift and go to state 18
+    ID              shift and go to state 13
+
+    expression                     shift and go to state 27
+
+state 16
+
+    (9) expression -> MORE . expression
+    (8) expression -> . LESS expression
+    (9) expression -> . MORE expression
+    (10) expression -> . expression MORE expression
+    (11) expression -> . expression LESS expression
+    (12) expression -> . expression MULTIPLICATION expression
+    (13) expression -> . expression DIVISION expression
+    (14) expression -> . expression MODULE expression
+    (15) expression -> . expression EXPONENTIAL expression
+    (16) expression -> . LPAREN expression RPAREN
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
+
+    LESS            shift and go to state 15
+    MORE            shift and go to state 16
+    LPAREN          shift and go to state 17
+    NUMBER          shift and go to state 18
+    ID              shift and go to state 13
+
+    expression                     shift and go to state 28
+
+state 17
+
+    (16) expression -> LPAREN . expression RPAREN
+    (8) expression -> . LESS expression
+    (9) expression -> . MORE expression
+    (10) expression -> . expression MORE expression
+    (11) expression -> . expression LESS expression
+    (12) expression -> . expression MULTIPLICATION expression
+    (13) expression -> . expression DIVISION expression
+    (14) expression -> . expression MODULE expression
+    (15) expression -> . expression EXPONENTIAL expression
+    (16) expression -> . LPAREN expression RPAREN
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
+
+    LESS            shift and go to state 15
+    MORE            shift and go to state 16
+    LPAREN          shift and go to state 17
+    NUMBER          shift and go to state 18
+    ID              shift and go to state 13
+
+    expression                     shift and go to state 29
+
+state 18
+
+    (17) expression -> NUMBER .
+
+    MORE            reduce using rule 17 (expression -> NUMBER .)
+    LESS            reduce using rule 17 (expression -> NUMBER .)
+    MULTIPLICATION  reduce using rule 17 (expression -> NUMBER .)
+    DIVISION        reduce using rule 17 (expression -> NUMBER .)
+    MODULE          reduce using rule 17 (expression -> NUMBER .)
+    EXPONENTIAL     reduce using rule 17 (expression -> NUMBER .)
+    ID              reduce using rule 17 (expression -> NUMBER .)
+    PRINT           reduce using rule 17 (expression -> NUMBER .)
+    INT             reduce using rule 17 (expression -> NUMBER .)
+    FLOAT           reduce using rule 17 (expression -> NUMBER .)
+    $end            reduce using rule 17 (expression -> NUMBER .)
+    RPAREN          reduce using rule 17 (expression -> NUMBER .)
+
+
+state 19
+
+    (5) statement -> PRINT LPAREN expression . RPAREN
+    (10) expression -> expression . MORE expression
+    (11) expression -> expression . LESS expression
+    (12) expression -> expression . MULTIPLICATION expression
+    (13) expression -> expression . DIVISION expression
+    (14) expression -> expression . MODULE expression
+    (15) expression -> expression . EXPONENTIAL expression
+
+    RPAREN          shift and go to state 30
+    MORE            shift and go to state 21
+    LESS            shift and go to state 22
+    MULTIPLICATION  shift and go to state 23
+    DIVISION        shift and go to state 24
+    MODULE          shift and go to state 25
+    EXPONENTIAL     shift and go to state 26
+
+
+state 20
+
+    (3) statement -> type ID EQUALS expression .
+    (10) expression -> expression . MORE expression
+    (11) expression -> expression . LESS expression
+    (12) expression -> expression . MULTIPLICATION expression
+    (13) expression -> expression . DIVISION expression
+    (14) expression -> expression . MODULE expression
+    (15) expression -> expression . EXPONENTIAL expression
+
+    ID              reduce using rule 3 (statement -> type ID EQUALS expression .)
+    PRINT           reduce using rule 3 (statement -> type ID EQUALS expression .)
+    INT             reduce using rule 3 (statement -> type ID EQUALS expression .)
+    FLOAT           reduce using rule 3 (statement -> type ID EQUALS expression .)
+    $end            reduce using rule 3 (statement -> type ID EQUALS expression .)
+    MORE            shift and go to state 21
+    LESS            shift and go to state 22
+    MULTIPLICATION  shift and go to state 23
+    DIVISION        shift and go to state 24
+    MODULE          shift and go to state 25
+    EXPONENTIAL     shift and go to state 26
+
+
+state 21
+
+    (10) expression -> expression MORE . expression
+    (8) expression -> . LESS expression
+    (9) expression -> . MORE expression
+    (10) expression -> . expression MORE expression
+    (11) expression -> . expression LESS expression
+    (12) expression -> . expression MULTIPLICATION expression
+    (13) expression -> . expression DIVISION expression
+    (14) expression -> . expression MODULE expression
+    (15) expression -> . expression EXPONENTIAL expression
+    (16) expression -> . LPAREN expression RPAREN
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
+
+    LESS            shift and go to state 15
+    MORE            shift and go to state 16
+    LPAREN          shift and go to state 17
+    NUMBER          shift and go to state 18
+    ID              shift and go to state 13
+
+    expression                     shift and go to state 31
+
+state 22
+
+    (11) expression -> expression LESS . expression
+    (8) expression -> . LESS expression
+    (9) expression -> . MORE expression
+    (10) expression -> . expression MORE expression
+    (11) expression -> . expression LESS expression
+    (12) expression -> . expression MULTIPLICATION expression
+    (13) expression -> . expression DIVISION expression
+    (14) expression -> . expression MODULE expression
+    (15) expression -> . expression EXPONENTIAL expression
+    (16) expression -> . LPAREN expression RPAREN
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
+
+    LESS            shift and go to state 15
+    MORE            shift and go to state 16
+    LPAREN          shift and go to state 17
+    NUMBER          shift and go to state 18
+    ID              shift and go to state 13
+
+    expression                     shift and go to state 32
+
+state 23
+
+    (12) expression -> expression MULTIPLICATION . expression
+    (8) expression -> . LESS expression
+    (9) expression -> . MORE expression
+    (10) expression -> . expression MORE expression
+    (11) expression -> . expression LESS expression
+    (12) expression -> . expression MULTIPLICATION expression
+    (13) expression -> . expression DIVISION expression
+    (14) expression -> . expression MODULE expression
+    (15) expression -> . expression EXPONENTIAL expression
+    (16) expression -> . LPAREN expression RPAREN
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
+
+    LESS            shift and go to state 15
+    MORE            shift and go to state 16
+    LPAREN          shift and go to state 17
+    NUMBER          shift and go to state 18
+    ID              shift and go to state 13
+
+    expression                     shift and go to state 33
+
+state 24
+
+    (13) expression -> expression DIVISION . expression
+    (8) expression -> . LESS expression
+    (9) expression -> . MORE expression
+    (10) expression -> . expression MORE expression
+    (11) expression -> . expression LESS expression
+    (12) expression -> . expression MULTIPLICATION expression
+    (13) expression -> . expression DIVISION expression
+    (14) expression -> . expression MODULE expression
+    (15) expression -> . expression EXPONENTIAL expression
+    (16) expression -> . LPAREN expression RPAREN
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
+
+    LESS            shift and go to state 15
+    MORE            shift and go to state 16
+    LPAREN          shift and go to state 17
+    NUMBER          shift and go to state 18
+    ID              shift and go to state 13
+
+    expression                     shift and go to state 34
+
+state 25
+
+    (14) expression -> expression MODULE . expression
+    (8) expression -> . LESS expression
+    (9) expression -> . MORE expression
+    (10) expression -> . expression MORE expression
+    (11) expression -> . expression LESS expression
+    (12) expression -> . expression MULTIPLICATION expression
+    (13) expression -> . expression DIVISION expression
+    (14) expression -> . expression MODULE expression
+    (15) expression -> . expression EXPONENTIAL expression
+    (16) expression -> . LPAREN expression RPAREN
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
+
+    LESS            shift and go to state 15
+    MORE            shift and go to state 16
+    LPAREN          shift and go to state 17
+    NUMBER          shift and go to state 18
+    ID              shift and go to state 13
+
+    expression                     shift and go to state 35
+
+state 26
+
+    (15) expression -> expression EXPONENTIAL . expression
+    (8) expression -> . LESS expression
+    (9) expression -> . MORE expression
+    (10) expression -> . expression MORE expression
+    (11) expression -> . expression LESS expression
+    (12) expression -> . expression MULTIPLICATION expression
+    (13) expression -> . expression DIVISION expression
+    (14) expression -> . expression MODULE expression
+    (15) expression -> . expression EXPONENTIAL expression
+    (16) expression -> . LPAREN expression RPAREN
+    (17) expression -> . NUMBER
+    (18) expression -> . ID
+
+    LESS            shift and go to state 15
+    MORE            shift and go to state 16
+    LPAREN          shift and go to state 17
+    NUMBER          shift and go to state 18
+    ID              shift and go to state 13
+
+    expression                     shift and go to state 36
+
+state 27
+
+    (8) expression -> LESS expression .
+    (10) expression -> expression . MORE expression
+    (11) expression -> expression . LESS expression
+    (12) expression -> expression . MULTIPLICATION expression
+    (13) expression -> expression . DIVISION expression
+    (14) expression -> expression . MODULE expression
+    (15) expression -> expression . EXPONENTIAL expression
+
+    MORE            reduce using rule 8 (expression -> LESS expression .)
+    LESS            reduce using rule 8 (expression -> LESS expression .)
+    MULTIPLICATION  reduce using rule 8 (expression -> LESS expression .)
+    DIVISION        reduce using rule 8 (expression -> LESS expression .)
+    MODULE          reduce using rule 8 (expression -> LESS expression .)
+    EXPONENTIAL     reduce using rule 8 (expression -> LESS expression .)
+    ID              reduce using rule 8 (expression -> LESS expression .)
+    PRINT           reduce using rule 8 (expression -> LESS expression .)
+    INT             reduce using rule 8 (expression -> LESS expression .)
+    FLOAT           reduce using rule 8 (expression -> LESS expression .)
+    $end            reduce using rule 8 (expression -> LESS expression .)
+    RPAREN          reduce using rule 8 (expression -> LESS expression .)
+
+  ! MORE            [ shift and go to state 21 ]
+  ! LESS            [ shift and go to state 22 ]
+  ! MULTIPLICATION  [ shift and go to state 23 ]
+  ! DIVISION        [ shift and go to state 24 ]
+  ! MODULE          [ shift and go to state 25 ]
+  ! EXPONENTIAL     [ shift and go to state 26 ]
+
+
+state 28
+
+    (9) expression -> MORE expression .
+    (10) expression -> expression . MORE expression
+    (11) expression -> expression . LESS expression
+    (12) expression -> expression . MULTIPLICATION expression
+    (13) expression -> expression . DIVISION expression
+    (14) expression -> expression . MODULE expression
+    (15) expression -> expression . EXPONENTIAL expression
+
+    MORE            reduce using rule 9 (expression -> MORE expression .)
+    LESS            reduce using rule 9 (expression -> MORE expression .)
+    MULTIPLICATION  reduce using rule 9 (expression -> MORE expression .)
+    DIVISION        reduce using rule 9 (expression -> MORE expression .)
+    MODULE          reduce using rule 9 (expression -> MORE expression .)
+    EXPONENTIAL     reduce using rule 9 (expression -> MORE expression .)
+    ID              reduce using rule 9 (expression -> MORE expression .)
+    PRINT           reduce using rule 9 (expression -> MORE expression .)
+    INT             reduce using rule 9 (expression -> MORE expression .)
+    FLOAT           reduce using rule 9 (expression -> MORE expression .)
+    $end            reduce using rule 9 (expression -> MORE expression .)
+    RPAREN          reduce using rule 9 (expression -> MORE expression .)
+
+  ! MORE            [ shift and go to state 21 ]
+  ! LESS            [ shift and go to state 22 ]
+  ! MULTIPLICATION  [ shift and go to state 23 ]
+  ! DIVISION        [ shift and go to state 24 ]
+  ! MODULE          [ shift and go to state 25 ]
+  ! EXPONENTIAL     [ shift and go to state 26 ]
+
+
+state 29
+
+    (16) expression -> LPAREN expression . RPAREN
+    (10) expression -> expression . MORE expression
+    (11) expression -> expression . LESS expression
+    (12) expression -> expression . MULTIPLICATION expression
+    (13) expression -> expression . DIVISION expression
+    (14) expression -> expression . MODULE expression
+    (15) expression -> expression . EXPONENTIAL expression
+
+    RPAREN          shift and go to state 37
+    MORE            shift and go to state 21
+    LESS            shift and go to state 22
+    MULTIPLICATION  shift and go to state 23
+    DIVISION        shift and go to state 24
+    MODULE          shift and go to state 25
+    EXPONENTIAL     shift and go to state 26
+
+
+state 30
+
+    (5) statement -> PRINT LPAREN expression RPAREN .
+
+    ID              reduce using rule 5 (statement -> PRINT LPAREN expression RPAREN .)
+    PRINT           reduce using rule 5 (statement -> PRINT LPAREN expression RPAREN .)
+    INT             reduce using rule 5 (statement -> PRINT LPAREN expression RPAREN .)
+    FLOAT           reduce using rule 5 (statement -> PRINT LPAREN expression RPAREN .)
+    $end            reduce using rule 5 (statement -> PRINT LPAREN expression RPAREN .)
+
+
+state 31
+
+    (10) expression -> expression MORE expression .
+    (10) expression -> expression . MORE expression
+    (11) expression -> expression . LESS expression
+    (12) expression -> expression . MULTIPLICATION expression
+    (13) expression -> expression . DIVISION expression
+    (14) expression -> expression . MODULE expression
+    (15) expression -> expression . EXPONENTIAL expression
+
+    MORE            reduce using rule 10 (expression -> expression MORE expression .)
+    LESS            reduce using rule 10 (expression -> expression MORE expression .)
+    ID              reduce using rule 10 (expression -> expression MORE expression .)
+    PRINT           reduce using rule 10 (expression -> expression MORE expression .)
+    INT             reduce using rule 10 (expression -> expression MORE expression .)
+    FLOAT           reduce using rule 10 (expression -> expression MORE expression .)
+    $end            reduce using rule 10 (expression -> expression MORE expression .)
+    RPAREN          reduce using rule 10 (expression -> expression MORE expression .)
+    MULTIPLICATION  shift and go to state 23
+    DIVISION        shift and go to state 24
+    MODULE          shift and go to state 25
+    EXPONENTIAL     shift and go to state 26
+
+  ! MULTIPLICATION  [ reduce using rule 10 (expression -> expression MORE expression .) ]
+  ! DIVISION        [ reduce using rule 10 (expression -> expression MORE expression .) ]
+  ! MODULE          [ reduce using rule 10 (expression -> expression MORE expression .) ]
+  ! EXPONENTIAL     [ reduce using rule 10 (expression -> expression MORE expression .) ]
+  ! MORE            [ shift and go to state 21 ]
+  ! LESS            [ shift and go to state 22 ]
+
+
+state 32
+
+    (11) expression -> expression LESS expression .
+    (10) expression -> expression . MORE expression
+    (11) expression -> expression . LESS expression
+    (12) expression -> expression . MULTIPLICATION expression
+    (13) expression -> expression . DIVISION expression
+    (14) expression -> expression . MODULE expression
+    (15) expression -> expression . EXPONENTIAL expression
+
+    MORE            reduce using rule 11 (expression -> expression LESS expression .)
+    LESS            reduce using rule 11 (expression -> expression LESS expression .)
+    ID              reduce using rule 11 (expression -> expression LESS expression .)
+    PRINT           reduce using rule 11 (expression -> expression LESS expression .)
+    INT             reduce using rule 11 (expression -> expression LESS expression .)
+    FLOAT           reduce using rule 11 (expression -> expression LESS expression .)
+    $end            reduce using rule 11 (expression -> expression LESS expression .)
+    RPAREN          reduce using rule 11 (expression -> expression LESS expression .)
+    MULTIPLICATION  shift and go to state 23
+    DIVISION        shift and go to state 24
+    MODULE          shift and go to state 25
+    EXPONENTIAL     shift and go to state 26
+
+  ! MULTIPLICATION  [ reduce using rule 11 (expression -> expression LESS expression .) ]
+  ! DIVISION        [ reduce using rule 11 (expression -> expression LESS expression .) ]
+  ! MODULE          [ reduce using rule 11 (expression -> expression LESS expression .) ]
+  ! EXPONENTIAL     [ reduce using rule 11 (expression -> expression LESS expression .) ]
+  ! MORE            [ shift and go to state 21 ]
+  ! LESS            [ shift and go to state 22 ]
+
+
+state 33
+
+    (12) expression -> expression MULTIPLICATION expression .
+    (10) expression -> expression . MORE expression
+    (11) expression -> expression . LESS expression
+    (12) expression -> expression . MULTIPLICATION expression
+    (13) expression -> expression . DIVISION expression
+    (14) expression -> expression . MODULE expression
+    (15) expression -> expression . EXPONENTIAL expression
+
+    MORE            reduce using rule 12 (expression -> expression MULTIPLICATION expression .)
+    LESS            reduce using rule 12 (expression -> expression MULTIPLICATION expression .)
+    MULTIPLICATION  reduce using rule 12 (expression -> expression MULTIPLICATION expression .)
+    DIVISION        reduce using rule 12 (expression -> expression MULTIPLICATION expression .)
+    MODULE          reduce using rule 12 (expression -> expression MULTIPLICATION expression .)
+    ID              reduce using rule 12 (expression -> expression MULTIPLICATION expression .)
+    PRINT           reduce using rule 12 (expression -> expression MULTIPLICATION expression .)
+    INT             reduce using rule 12 (expression -> expression MULTIPLICATION expression .)
+    FLOAT           reduce using rule 12 (expression -> expression MULTIPLICATION expression .)
+    $end            reduce using rule 12 (expression -> expression MULTIPLICATION expression .)
+    RPAREN          reduce using rule 12 (expression -> expression MULTIPLICATION expression .)
+    EXPONENTIAL     shift and go to state 26
+
+  ! EXPONENTIAL     [ reduce using rule 12 (expression -> expression MULTIPLICATION expression .) ]
+  ! MORE            [ shift and go to state 21 ]
+  ! LESS            [ shift and go to state 22 ]
+  ! MULTIPLICATION  [ shift and go to state 23 ]
+  ! DIVISION        [ shift and go to state 24 ]
+  ! MODULE          [ shift and go to state 25 ]
+
+
+state 34
+
+    (13) expression -> expression DIVISION expression .
+    (10) expression -> expression . MORE expression
+    (11) expression -> expression . LESS expression
+    (12) expression -> expression . MULTIPLICATION expression
+    (13) expression -> expression . DIVISION expression
+    (14) expression -> expression . MODULE expression
+    (15) expression -> expression . EXPONENTIAL expression
+
+    MORE            reduce using rule 13 (expression -> expression DIVISION expression .)
+    LESS            reduce using rule 13 (expression -> expression DIVISION expression .)
+    MULTIPLICATION  reduce using rule 13 (expression -> expression DIVISION expression .)
+    DIVISION        reduce using rule 13 (expression -> expression DIVISION expression .)
+    MODULE          reduce using rule 13 (expression -> expression DIVISION expression .)
+    ID              reduce using rule 13 (expression -> expression DIVISION expression .)
+    PRINT           reduce using rule 13 (expression -> expression DIVISION expression .)
+    INT             reduce using rule 13 (expression -> expression DIVISION expression .)
+    FLOAT           reduce using rule 13 (expression -> expression DIVISION expression .)
+    $end            reduce using rule 13 (expression -> expression DIVISION expression .)
+    RPAREN          reduce using rule 13 (expression -> expression DIVISION expression .)
+    EXPONENTIAL     shift and go to state 26
+
+  ! EXPONENTIAL     [ reduce using rule 13 (expression -> expression DIVISION expression .) ]
+  ! MORE            [ shift and go to state 21 ]
+  ! LESS            [ shift and go to state 22 ]
+  ! MULTIPLICATION  [ shift and go to state 23 ]
+  ! DIVISION        [ shift and go to state 24 ]
+  ! MODULE          [ shift and go to state 25 ]
+
+
+state 35
+
+    (14) expression -> expression MODULE expression .
+    (10) expression -> expression . MORE expression
+    (11) expression -> expression . LESS expression
+    (12) expression -> expression . MULTIPLICATION expression
+    (13) expression -> expression . DIVISION expression
+    (14) expression -> expression . MODULE expression
+    (15) expression -> expression . EXPONENTIAL expression
+
+    MORE            reduce using rule 14 (expression -> expression MODULE expression .)
+    LESS            reduce using rule 14 (expression -> expression MODULE expression .)
+    MULTIPLICATION  reduce using rule 14 (expression -> expression MODULE expression .)
+    DIVISION        reduce using rule 14 (expression -> expression MODULE expression .)
+    MODULE          reduce using rule 14 (expression -> expression MODULE expression .)
+    ID              reduce using rule 14 (expression -> expression MODULE expression .)
+    PRINT           reduce using rule 14 (expression -> expression MODULE expression .)
+    INT             reduce using rule 14 (expression -> expression MODULE expression .)
+    FLOAT           reduce using rule 14 (expression -> expression MODULE expression .)
+    $end            reduce using rule 14 (expression -> expression MODULE expression .)
+    RPAREN          reduce using rule 14 (expression -> expression MODULE expression .)
+    EXPONENTIAL     shift and go to state 26
+
+  ! EXPONENTIAL     [ reduce using rule 14 (expression -> expression MODULE expression .) ]
+  ! MORE            [ shift and go to state 21 ]
+  ! LESS            [ shift and go to state 22 ]
+  ! MULTIPLICATION  [ shift and go to state 23 ]
+  ! DIVISION        [ shift and go to state 24 ]
+  ! MODULE          [ shift and go to state 25 ]
+
+
+state 36
+
+    (15) expression -> expression EXPONENTIAL expression .
+    (10) expression -> expression . MORE expression
+    (11) expression -> expression . LESS expression
+    (12) expression -> expression . MULTIPLICATION expression
+    (13) expression -> expression . DIVISION expression
+    (14) expression -> expression . MODULE expression
+    (15) expression -> expression . EXPONENTIAL expression
+
+    MORE            reduce using rule 15 (expression -> expression EXPONENTIAL expression .)
+    LESS            reduce using rule 15 (expression -> expression EXPONENTIAL expression .)
+    MULTIPLICATION  reduce using rule 15 (expression -> expression EXPONENTIAL expression .)
+    DIVISION        reduce using rule 15 (expression -> expression EXPONENTIAL expression .)
+    MODULE          reduce using rule 15 (expression -> expression EXPONENTIAL expression .)
+    ID              reduce using rule 15 (expression -> expression EXPONENTIAL expression .)
+    PRINT           reduce using rule 15 (expression -> expression EXPONENTIAL expression .)
+    INT             reduce using rule 15 (expression -> expression EXPONENTIAL expression .)
+    FLOAT           reduce using rule 15 (expression -> expression EXPONENTIAL expression .)
+    $end            reduce using rule 15 (expression -> expression EXPONENTIAL expression .)
+    RPAREN          reduce using rule 15 (expression -> expression EXPONENTIAL expression .)
+    EXPONENTIAL     shift and go to state 26
+
+  ! EXPONENTIAL     [ reduce using rule 15 (expression -> expression EXPONENTIAL expression .) ]
+  ! MORE            [ shift and go to state 21 ]
+  ! LESS            [ shift and go to state 22 ]
+  ! MULTIPLICATION  [ shift and go to state 23 ]
+  ! DIVISION        [ shift and go to state 24 ]
+  ! MODULE          [ shift and go to state 25 ]
+
+
+state 37
+
+    (16) expression -> LPAREN expression RPAREN .
+
+    MORE            reduce using rule 16 (expression -> LPAREN expression RPAREN .)
+    LESS            reduce using rule 16 (expression -> LPAREN expression RPAREN .)
+    MULTIPLICATION  reduce using rule 16 (expression -> LPAREN expression RPAREN .)
+    DIVISION        reduce using rule 16 (expression -> LPAREN expression RPAREN .)
+    MODULE          reduce using rule 16 (expression -> LPAREN expression RPAREN .)
+    EXPONENTIAL     reduce using rule 16 (expression -> LPAREN expression RPAREN .)
+    ID              reduce using rule 16 (expression -> LPAREN expression RPAREN .)
+    PRINT           reduce using rule 16 (expression -> LPAREN expression RPAREN .)
+    INT             reduce using rule 16 (expression -> LPAREN expression RPAREN .)
+    FLOAT           reduce using rule 16 (expression -> LPAREN expression RPAREN .)
+    $end            reduce using rule 16 (expression -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 16 (expression -> LPAREN expression RPAREN .)
 

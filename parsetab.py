@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'statementBOOL BOOL_FALSE BOOL_TRUE BRACKETS BREAK DIVISION DO ELSE EQUALS EXPONENTIAL FLOAT FOR ID IF INT LESS LKEY LPAREN MODULE MORE MULTIPLICATION NULL NUMBER OPERATORS RETURN RKEY RPAREN SIMPLE_LITERAL SPECIAL SPOT WHILEstatement : type ID EQUALS valuetype : INT\n            | FLOAT\n            | BOOLvalue : NUMBERvalue : SPOTvalue : BOOL_TRUE\n             | BOOL_FALSE'
+_lr_signature = 'leftLESSMOREleftMULTIPLICATIONDIVISIONMODULErightEXPONENTIALrightUMINUSUPLUSBOOL BOOL_FALSE BOOL_TRUE BRACKETS BREAK DIVISION DO ELSE EQUALS EXPONENTIAL FLOAT FOR ID IF INT LESS LKEY LPAREN MODULE MORE MULTIPLICATION NULL NUMBER OPERATORS PRINT RETURN RKEY RPAREN SIMPLE_LITERAL SPECIAL WHILEstatements : statements statement\n                  | statementstatement : type ID EQUALS expressionstatement : ID EQUALS expressionstatement : PRINT LPAREN expression RPARENtype : INT\n            | FLOATexpression : LESS expression %prec UMINUS\n                  | MORE expression %prec UPLUSexpression : expression MORE expression\n                  | expression LESS expression\n                  | expression MULTIPLICATION expression\n                  | expression DIVISION expression\n                  | expression MODULE expressionexpression : expression EXPONENTIAL expressionexpression : LPAREN expression RPARENexpression : NUMBERexpression : ID'
     
-_lr_action_items = {'INT':([0,],[3,]),'FLOAT':([0,],[4,]),'BOOL':([0,],[5,]),'$end':([1,8,9,10,11,12,],[0,-1,-5,-6,-7,-8,]),'ID':([2,3,4,5,],[6,-2,-3,-4,]),'EQUALS':([6,],[7,]),'NUMBER':([7,],[9,]),'SPOT':([7,],[10,]),'BOOL_TRUE':([7,],[11,]),'BOOL_FALSE':([7,],[12,]),}
+_lr_action_items = {'ID':([0,1,2,3,6,7,8,10,11,12,13,14,15,16,17,18,20,21,22,23,24,25,26,27,28,30,31,32,33,34,35,36,37,],[4,4,-2,9,-6,-7,-1,13,13,13,-18,-4,13,13,13,-17,-3,13,13,13,13,13,13,-8,-9,-5,-10,-11,-12,-13,-14,-15,-16,]),'PRINT':([0,1,2,8,13,14,18,20,27,28,30,31,32,33,34,35,36,37,],[5,5,-2,-1,-18,-4,-17,-3,-8,-9,-5,-10,-11,-12,-13,-14,-15,-16,]),'INT':([0,1,2,8,13,14,18,20,27,28,30,31,32,33,34,35,36,37,],[6,6,-2,-1,-18,-4,-17,-3,-8,-9,-5,-10,-11,-12,-13,-14,-15,-16,]),'FLOAT':([0,1,2,8,13,14,18,20,27,28,30,31,32,33,34,35,36,37,],[7,7,-2,-1,-18,-4,-17,-3,-8,-9,-5,-10,-11,-12,-13,-14,-15,-16,]),'$end':([1,2,8,13,14,18,20,27,28,30,31,32,33,34,35,36,37,],[0,-2,-1,-18,-4,-17,-3,-8,-9,-5,-10,-11,-12,-13,-14,-15,-16,]),'EQUALS':([4,9,],[10,12,]),'LPAREN':([5,10,11,12,15,16,17,21,22,23,24,25,26,],[11,17,17,17,17,17,17,17,17,17,17,17,17,]),'LESS':([10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,31,32,33,34,35,36,37,],[15,15,15,-18,22,15,15,15,-17,22,22,15,15,15,15,15,15,-8,-9,22,-10,-11,-12,-13,-14,-15,-16,]),'MORE':([10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,31,32,33,34,35,36,37,],[16,16,16,-18,21,16,16,16,-17,21,21,16,16,16,16,16,16,-8,-9,21,-10,-11,-12,-13,-14,-15,-16,]),'NUMBER':([10,11,12,15,16,17,21,22,23,24,25,26,],[18,18,18,18,18,18,18,18,18,18,18,18,]),'MULTIPLICATION':([13,14,18,19,20,27,28,29,31,32,33,34,35,36,37,],[-18,23,-17,23,23,-8,-9,23,23,23,-12,-13,-14,-15,-16,]),'DIVISION':([13,14,18,19,20,27,28,29,31,32,33,34,35,36,37,],[-18,24,-17,24,24,-8,-9,24,24,24,-12,-13,-14,-15,-16,]),'MODULE':([13,14,18,19,20,27,28,29,31,32,33,34,35,36,37,],[-18,25,-17,25,25,-8,-9,25,25,25,-12,-13,-14,-15,-16,]),'EXPONENTIAL':([13,14,18,19,20,27,28,29,31,32,33,34,35,36,37,],[-18,26,-17,26,26,-8,-9,26,26,26,26,26,26,26,-16,]),'RPAREN':([13,18,19,27,28,29,31,32,33,34,35,36,37,],[-18,-17,30,-8,-9,37,-10,-11,-12,-13,-14,-15,-16,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'statement':([0,],[1,]),'type':([0,],[2,]),'value':([7,],[8,]),}
+_lr_goto_items = {'statements':([0,],[1,]),'statement':([0,1,],[2,8,]),'type':([0,1,],[3,3,]),'expression':([10,11,12,15,16,17,21,22,23,24,25,26,],[14,19,20,27,28,29,31,32,33,34,35,36,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,13 +26,23 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> statement","S'",1,None,None,None),
-  ('statement -> type ID EQUALS value','statement',4,'p_statement_assign','analizador_sitactico.py',12),
-  ('type -> INT','type',1,'p_type','analizador_sitactico.py',28),
-  ('type -> FLOAT','type',1,'p_type','analizador_sitactico.py',29),
-  ('type -> BOOL','type',1,'p_type','analizador_sitactico.py',30),
-  ('value -> NUMBER','value',1,'p_value_int','analizador_sitactico.py',35),
-  ('value -> SPOT','value',1,'p_value_float','analizador_sitactico.py',41),
-  ('value -> BOOL_TRUE','value',1,'p_value_bool','analizador_sitactico.py',47),
-  ('value -> BOOL_FALSE','value',1,'p_value_bool','analizador_sitactico.py',48),
+  ("S' -> statements","S'",1,None,None,None),
+  ('statements -> statements statement','statements',2,'p_statements','Interprete.py',18),
+  ('statements -> statement','statements',1,'p_statements','Interprete.py',19),
+  ('statement -> type ID EQUALS expression','statement',4,'p_statement_assign_typed','Interprete.py',24),
+  ('statement -> ID EQUALS expression','statement',3,'p_statement_assign_untyped','Interprete.py',35),
+  ('statement -> PRINT LPAREN expression RPAREN','statement',4,'p_statement_print','Interprete.py',42),
+  ('type -> INT','type',1,'p_type','Interprete.py',48),
+  ('type -> FLOAT','type',1,'p_type','Interprete.py',49),
+  ('expression -> LESS expression','expression',2,'p_expression_unary','Interprete.py',54),
+  ('expression -> MORE expression','expression',2,'p_expression_unary','Interprete.py',55),
+  ('expression -> expression MORE expression','expression',3,'p_expression_arithmetic','Interprete.py',63),
+  ('expression -> expression LESS expression','expression',3,'p_expression_arithmetic','Interprete.py',64),
+  ('expression -> expression MULTIPLICATION expression','expression',3,'p_expression_arithmetic','Interprete.py',65),
+  ('expression -> expression DIVISION expression','expression',3,'p_expression_arithmetic','Interprete.py',66),
+  ('expression -> expression MODULE expression','expression',3,'p_expression_arithmetic','Interprete.py',67),
+  ('expression -> expression EXPONENTIAL expression','expression',3,'p_expression_exponential','Interprete.py',83),
+  ('expression -> LPAREN expression RPAREN','expression',3,'p_expression_group','Interprete.py',94),
+  ('expression -> NUMBER','expression',1,'p_expression_number','Interprete.py',99),
+  ('expression -> ID','expression',1,'p_expression_variable','Interprete.py',104),
 ]
